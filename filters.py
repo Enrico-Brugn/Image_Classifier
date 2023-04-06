@@ -33,7 +33,7 @@ def low_pass_filter(img, kernel_size = 4):
 
 def hist_equal(img):
     heq = cv2.equalizeHist(img)
-    cv2.imwrite("heq.tiff", heq)
+    # cv2.imwrite("heq.tiff", heq)
     return heq
     
 def canny_edge_detect(img, save_ced = False):
