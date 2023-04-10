@@ -30,14 +30,23 @@ class SmartImage:
 
     def fliplr(self):
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
-
+        # 0,10
+                # 50,50
+                
+        # 50,10         0,10
+        # 50,50         0, 50
         self.img = np.fliplr(self.img)
         
-        self.coord[0,1], self.coord[1,1] = self.coord[1,1], self.coord[0,1] 
+        self.coord[0,0], self.coord[1,0] = self.coord[1,0], self.coord[0,0] 
 
     def rot90(self, number = 1):
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
-
+        # 0,10       50,10
+        # 0,50       50,50
+        
+        # 0,50       0,10
+        # 50,50       50,10
+                
         for i in range(number):
             self.img = np.rot90(self.img)
             self.coord[0,1], self.coord[1,1] = self.coord[1,1], self.coord[0,1] 

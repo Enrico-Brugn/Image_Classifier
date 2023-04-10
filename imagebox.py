@@ -26,8 +26,8 @@ for jsonPath in jsonList:
     img1 = imga[100 : imga.shape[0] - 200, 
                 50 : imga.shape[1]- 50]
     
-    starting_smart_im = SmartImage(img1, np.array([[100, img.shape[0] - 200], 
-                                                   [50 , img.shape[1]- 50]]))
+    starting_smart_im = SmartImage(img1, np.array([[100, 50], 
+                                                   [img.shape[0] - 200, img.shape[1]- 50]]))
     wire_array = IM.cut_side(starting_smart_im, [1, 2, 3, 4])
 
     three_columns = IM.split(wire_array)
