@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import cv2
+import re
 
 class SmartImage:
     def __init__(self, image, coordinates, rotation_number = 0):
-        self.origin = None
+        self.name = None
         self.label = None
         self.rotation_number = rotation_number
         self.img = image
@@ -28,8 +29,14 @@ class SmartImage:
     def setLabel(self, label):
         self.label = label
 
-    def setOrigin(self, origin):
-        self.origin = origin
+    def setName(self, name, wire):
+        print(str(name))
+        file = re.split("\.|\/", str(name))
+        print(file)
+        if wire < 10:
+            self.name = f"{file[-2]}_0{wire}.tiff"
+        else:
+            self.name = f"{file[-2]}_{wire}.tiff"
 
     def increase_rot_num(self):
         self.rotation_number +=1
@@ -122,3 +129,4 @@ class SmartImage:
         plt.imshow(self.img, cmap='Greys_r')
         plt.annotate(self.label, xy = (0, 0))
         plt.savefig("test.png" )
+    

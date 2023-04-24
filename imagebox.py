@@ -5,7 +5,6 @@ import os
 import copy
 from scipy.stats import mode
 from scipy import ndimage
-import json
 from pathlib import Path
 import labelme
 from SmartImage import SmartImage 
@@ -49,12 +48,11 @@ for jsonPath in jsonList:
             wire.rot90(3)
         wire_list.extend(wires)
 
-    assert len(wire_list) == 66
-
     labels = label_file.shapes
-
+    i = 0
     for wire in wire_list:
-        wire.setOrigin(label_file.filename)
+        i += 1
+        wire.setName(label_file.filename, i)
         wire_label = []
         for label in labels:
             points_in_image = []
@@ -83,23 +81,23 @@ for jsonPath in jsonList:
                     break
         elif len(wire_label) == 0:
             wire.setLabel("Delete")
-    
-    assert len(wire_list) == 66 
 
+    filename = label_file.filename
     for wire in wire_list:
         if wire.label == "Delete":
             wire_list.remove(wire)
         else:
+
             continue
-    print(wire_list)
-    print(str(len(wire_list)))
-    plt.imshow(img)
-    for wire in wire_list:
-        plt.scatter(wire.coord[0, 1], wire.coord[0, 0])
-        plt.scatter(wire.coord[1, 1], wire.coord[1, 0])
-    plt.savefig("test.png")
-    for wire in wire_list:
-        print(wire.label)
+
     images_vector.extend(wire_list)
 
 print(images_vector)
+
+img_dict = {}
+
+for image in images_vector:
+    cv2.imwrite(image.name, image.img)
+    current_wire = {image.name : image.label}
+    img_dict.update(current_wire)
+    exit

@@ -1,44 +1,19 @@
-import copy
 import numpy as np
 from SmartImage import SmartImage
-import cv2
-
-def min_pool(img, sz = (5,2), stride = (5,1)):
-    im = copy.deepcopy(img)
-    im_size = img.shape
-
-    for i in range(0, im_size[0], stride[0]):
-        for j in range(0, im_size[1], stride[1]):
-            im[i : i + sz[0], j : j + sz[1]] = np.min(im[i : i + sz[0],j : j + sz[1]])
-    return im
-
-
-def max_pool(img, sz = (5,2), stride = (5,1)):
-    im = copy.deepcopy(img)
-    im_size = img.shape
-
-    for i in range(0, im_size[0], stride[0]):
-        for j in range(0, im_size[1], stride[1]):
-            im[i : i + sz[0], j : j + sz[1]] = np.max(im[i : i + sz[0],j : j + sz[1]])
-    return im
 
 def cut_side(img1 , sides):
     for side in sides:
-        if side == 1:
-            # cut left
+        if side == 1: # cut left
             img1.cut(side)
-        if side == 2:
-            # cut right
+        if side == 2: # cut right
             img1.fliplr()
             img1.cut(side)
             img1.fliplr()
-        if side == 3:
-            # cut bottom
+        if side == 3: # cut bottom
             img1.rot90(number = 3)
             img1.cut(side)
             img1.rot90()
-        if side == 4:
-            # cut top
+        if side == 4: # cut top
             img1.rot90()
             img1.cut(side)
             img1.rot90(3)
