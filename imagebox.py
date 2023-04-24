@@ -24,29 +24,39 @@ for jsonPath in jsonList:
     img = 255 * (img-img.min())/(img.max()-img.min())
     imga = img.astype("uint8")
     img1 = imga[100 : imga.shape[0] - 200, 
-                50 : imga.shape[1]- 50]
+                50 : imga.shape[1] - 50]
     
     starting_smart_im = SmartImage(img1, np.array([[100, 50], 
-                                                   [img.shape[0] - 200, img.shape[1]- 50]]))
-    wire_array = IM.cut_side(starting_smart_im, [1, 2, 3, 4])
+                                                   [img.shape[0] - 200, img.shape[1] - 50]]))
 
+    wire_array = IM.cut_side(starting_smart_im, [1, 2, 3, 4])
     three_columns = IM.split(wire_array)
     three_columns[0] = IM.cut_side(three_columns[0], [2])
     three_columns[1] = IM.cut_side(three_columns[1], [1,2])
     three_columns[2] = IM.cut_side(three_columns[2], [1])
-    
+
     six_columns = []
+    i=0
     for column in three_columns:
         six_columns.extend(IM.split(column, 2))
 
     wire_list = []
     for column in six_columns:
+        i+=1
         column.rot90()
+        plt.imshow(img)
+        plt.scatter(column.coord[0, 1], column.coord[0, 0])
+        plt.scatter(column.coord[1, 1], column.coord[1, 0])
+        plt.savefig(f"{i}.png")
+        print(column.coord)
+        print("____")
         wires = IM.split(column, 11)
         for wire in wires:
             wire.rot90(3)
         wire_list.extend(wires)
-    
+    exit()
+
+
     assert len(wire_list) == 66
 
     labels = label_file.shapes
@@ -94,12 +104,12 @@ for jsonPath in jsonList:
     print(wire_list)
     print(str(len(wire_list)))
     plt.imshow(img)
-    plt.annotate("Hello", xy=[10,10])
     for wire in wire_list:
-        plt.annotate(wire.label, xy = wire.coord[:,0])
-        print(wire.coord[:,0])
+        plt.scatter(wire.coord[0, 1], wire.coord[0, 0])
+        print(wire.coord)
+        plt.scatter(wire.coord[1, 1], wire.coord[1, 0])
     plt.savefig("test.png")
-    exit()
     images_vector.extend(wire_list)
+    exit()
 
 print(images_vector)
