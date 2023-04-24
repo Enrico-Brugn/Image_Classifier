@@ -43,19 +43,18 @@ for jsonPath in jsonList:
     wire_list = []
     for column in six_columns:
         i+=1
+        #print("____")
+        #print(f"coords pre rotation = {column.coord}")
         column.rot90()
-        plt.imshow(img)
-        plt.scatter(column.coord[0, 1], column.coord[0, 0])
-        plt.scatter(column.coord[1, 1], column.coord[1, 0])
-        plt.savefig(f"{i}.png")
-        print(column.coord)
-        print("____")
+        #plt.imshow(img)
+        #plt.scatter(column.coord[0, 1], column.coord[0, 0])
+        #plt.scatter(column.coord[1, 1], column.coord[1, 0])
+        #plt.savefig(f"{i}.png")
+        #print(f"coords post rotation = {column.coord}")
         wires = IM.split(column, 11)
         for wire in wires:
             wire.rot90(3)
         wire_list.extend(wires)
-    exit()
-
 
     assert len(wire_list) == 66
 

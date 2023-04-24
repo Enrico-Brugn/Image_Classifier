@@ -33,8 +33,15 @@ class SmartImage:
 
     def increase_rot_num(self):
         self.rotation_number +=1
-        if self.rotation_number == 4:
+        if self.rotation_number % 4 == 0:
             self.rotation_number = 0
+
+    def assess_coords(self):
+        if self.rotation_number == 0 or self.rotation_number % 4 == 0:
+            oc = self.coord
+            if oc[0][0] > oc[1][0]: #y axis
+                self.coord = [[oc[1][0], oc[0][1]], 
+                              [oc[0][0], oc[1][1]]]
 
     def fliplr(self):
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
@@ -47,8 +54,7 @@ class SmartImage:
 
         for i in range(1, number + 1):
             self.img = np.rot90(self.img)
-            self.rotation_number +=1
-            #self.increase_rot_num()
+            self.increase_rot_num()
             if self.rotation_number % 2 == 0:
                 self.coord[0][1], self.coord[1][1] = self.coord[1][1], self.coord[0][1] 
             else:

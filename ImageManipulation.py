@@ -49,21 +49,28 @@ def split(img1, num = 3):
     x_sizes = []
     for array in arrays:
         x_sizes.append(array.shape[1])
-
+    #print(f"x_sizes = {x_sizes}")
     smart_image_list = []
     oc = img1.coord
-    starting_x = oc[0][1]
+    if num == 11:
+        starting_x = oc[1][0]
+    else:
+        starting_x = oc[0][1]
     for i in range(len(arrays)):
+        #print(f"starting_x = {starting_x}")
         new_start = starting_x
         starting_x += x_sizes[i]
+        #print(f"ending_x = {starting_x}")
         if num == 11:
-            coords_i = np.array([[new_start, oc[0][0]], 
-                                 [starting_x, oc[1][0]]])
+            coords_i = np.array([[starting_x, oc[0][1]], 
+                                 [new_start, oc[1][1]]])
         else:
             coords_i = np.array([[oc[0][0], new_start], 
                                  [oc[1][0], starting_x]])
+        #print(f"coords_i = {coords_i}")
         smart_image_list.append(SmartImage(arrays[i], coords_i, img1.rotation_number))
     if num == 2:
         smart_image_list[1].fliplr()
+        smart_image_list[1].assess_coords()
     return smart_image_list
 
