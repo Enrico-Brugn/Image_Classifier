@@ -19,7 +19,7 @@ images_vector = []
 
 for jsonPath in jsonList:
     label_file = labelme.LabelFile(filename=jsonPath.absolute())
-    print(label_file.filename)
+    
     img = labelme.utils.img_data_to_arr(label_file.imageData)
     img = 255 * (img-img.min())/(img.max()-img.min())
     imga = img.astype("uint8")
@@ -28,29 +28,22 @@ for jsonPath in jsonList:
     
     starting_smart_im = SmartImage(img1, np.array([[100, 50], 
                                                    [img.shape[0] - 200, img.shape[1] - 50]]))
-
+    
     wire_array = IM.cut_side(starting_smart_im, [1, 2, 3, 4])
+    
     three_columns = IM.split(wire_array)
     three_columns[0] = IM.cut_side(three_columns[0], [2])
     three_columns[1] = IM.cut_side(three_columns[1], [1,2])
     three_columns[2] = IM.cut_side(three_columns[2], [1])
 
     six_columns = []
-    i=0
+
     for column in three_columns:
         six_columns.extend(IM.split(column, 2))
 
     wire_list = []
     for column in six_columns:
-        i+=1
-        #print("____")
-        #print(f"coords pre rotation = {column.coord}")
         column.rot90()
-        #plt.imshow(img)
-        #plt.scatter(column.coord[0, 1], column.coord[0, 0])
-        #plt.scatter(column.coord[1, 1], column.coord[1, 0])
-        #plt.savefig(f"{i}.png")
-        #print(f"coords post rotation = {column.coord}")
         wires = IM.split(column, 11)
         for wire in wires:
             wire.rot90(3)
@@ -65,12 +58,10 @@ for jsonPath in jsonList:
         wire_label = []
         for label in labels:
             points_in_image = []
-            # points_outside_image = []
             for point in label["points"]:
                 if wire.contains(point):
                     points_in_image.append(point)
                 else:
-                    #points_outside_image.append(point)
                     continue
             if len(points_in_image) > 0:
                 wire_label.append([label["label"], len(points_in_image)])
@@ -95,20 +86,20 @@ for jsonPath in jsonList:
     
     assert len(wire_list) == 66 
 
-    #for wire in wire_list:
-    #    if wire.label == "Delete":
-    #        wire_list.remove(wire)
-    #    else:
-    #        continue
+    for wire in wire_list:
+        if wire.label == "Delete":
+            wire_list.remove(wire)
+        else:
+            continue
     print(wire_list)
     print(str(len(wire_list)))
     plt.imshow(img)
     for wire in wire_list:
         plt.scatter(wire.coord[0, 1], wire.coord[0, 0])
-        print(wire.coord)
         plt.scatter(wire.coord[1, 1], wire.coord[1, 0])
     plt.savefig("test.png")
+    for wire in wire_list:
+        print(wire.label)
     images_vector.extend(wire_list)
-    exit()
 
 print(images_vector)

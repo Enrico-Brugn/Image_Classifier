@@ -40,8 +40,11 @@ class SmartImage:
         if self.rotation_number == 0 or self.rotation_number % 4 == 0:
             oc = self.coord
             if oc[0][0] > oc[1][0]: #y axis
-                self.coord = [[oc[1][0], oc[0][1]], 
-                              [oc[0][0], oc[1][1]]]
+                self.coord = np.array([[oc[1][0], oc[0][1]], 
+                                       [oc[0][0], oc[1][1]]])
+            if oc[0][1] > oc[1][1]: #x axis
+                self.coord = np.array([[oc[0][0], oc[1][1]], 
+                                       [oc[1][0], oc[0][1]]])
 
     def fliplr(self):
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
@@ -106,12 +109,13 @@ class SmartImage:
             new_coord = np.array([[oc[0][0], oc[0][1] + offset], 
                                   oc[1]])
         elif side == 3 or side == 4:
-            new_coord = np.array([[oc[0][0] + offset, oc[0][1]], 
-                                  oc[1]])
+            new_coord = np.array([oc[0], 
+                                  [oc[1][0] - offset, oc[1][1]]])
         else:
             raise AssertionError('"side" must be and int with a value of 1, 2, 3, or 4.')
         
         assert new_coord[0][1] >= 0, f"Coordinate lower than 0 after processing side {side}."
+        assert new_coord[1][0] >= 0, f"Coordinate lower than 0 after processing side {side}."
         self.coord = new_coord
 
     def print(self):
