@@ -16,9 +16,7 @@ tiffNames = [(i.stem + ".tif") for i in jsonList]
 
 images_vector = []
 
-for jsonPath in jsonList:
-    label_file = labelme.LabelFile(filename=jsonPath.absolute())
-    
+def process_json(label_file):
     img = labelme.utils.img_data_to_arr(label_file.imageData)
     img = 255 * (img-img.min())/(img.max()-img.min())
     imga = img.astype("uint8")
@@ -82,7 +80,6 @@ for jsonPath in jsonList:
         elif len(wire_label) == 0:
             wire.setLabel("Delete")
 
-    filename = label_file.filename
     for wire in wire_list:
         if wire.label == "Delete":
             wire_list.remove(wire)
@@ -91,6 +88,14 @@ for jsonPath in jsonList:
             continue
 
     images_vector.extend(wire_list)
+
+for jsonPath in jsonList:
+    label_file = labelme.LabelFile(filename=jsonPath.absolute())
+    try:
+        process_json(label_file)
+    except:
+        print(f"there was an error on file {label_file.filename}")
+        continue
 
 csv_list = []
 path = os.path.join(os.getcwd(), "wires")
