@@ -102,11 +102,18 @@ path = os.path.join(os.getcwd(), "wires")
 if not os.path.exists(path) and not os.path.isdir(path):
     os.mkdir(path)
 
-for image in images_vector:
+def image_writer(image):
     wire = os.path.join(path, image.name)
     cv2.imwrite(wire, image.img)
     current_wire = {'image_path' : wire, 'label' : image.label}
     csv_list.append(current_wire)
+
+for image in images_vector:
+    try:
+        image_writer(image)
+    except:
+        print("there was and error during image saving")
+        continue
 
 existing_csv = os.path.join(os.getcwd(), "Input_Data.csv")
 if os.path.exists(existing_csv):
