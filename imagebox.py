@@ -91,7 +91,6 @@ for jsonPath in jsonList:
             continue
 
     images_vector.extend(wire_list)
-    break
 
 csv_list = []
 path = os.path.join(os.getcwd(), "wires")
