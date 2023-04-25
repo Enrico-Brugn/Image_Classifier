@@ -91,6 +91,7 @@ for jsonPath in jsonList:
             continue
 
     images_vector.extend(wire_list)
+    break
 
 csv_list = []
 path = os.path.join(os.getcwd(), "wires")
@@ -102,6 +103,10 @@ for image in images_vector:
     cv2.imwrite(wire, image.img)
     current_wire = {'image_path' : wire, 'label' : image.label}
     csv_list.append(current_wire)
+
+existing_csv = os.path.join(os.getcwd(), "Input_Data.csv")
+if os.path.exists(existing_csv):
+    os.remove(existing_csv)
 
 with open('Input_Data.csv', 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames = csv_list[0].keys())

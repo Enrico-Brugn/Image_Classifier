@@ -30,9 +30,7 @@ class SmartImage:
         self.label = label
 
     def setName(self, name, wire):
-        print(str(name))
         file = re.split("\.|\/", str(name))
-        print(file)
         if wire < 10:
             self.name = f"{file[-2]}_0{wire}.tiff"
         else:
