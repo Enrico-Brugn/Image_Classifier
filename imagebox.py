@@ -3,8 +3,6 @@ import cv2
 import matplotlib.pyplot as plt
 import os
 import csv
-from scipy.stats import mode
-from scipy import ndimage
 from pathlib import Path
 import labelme
 from SmartImage import SmartImage 
@@ -23,8 +21,9 @@ def process_json(label_file):
     img1 = imga[100 : imga.shape[0] - 200, 
                 50 : imga.shape[1] - 50]
     
-    starting_smart_im = SmartImage(img1, np.array([[100, 50], 
-                                                   [img.shape[0] - 200, img.shape[1] - 50]]))
+    starting_smart_im = SmartImage(img1, 
+                                   np.array([[100, 50], 
+                                             [img.shape[0] - 200, img.shape[1] - 50]]))
     
     wire_array = IM.cut_side(starting_smart_im, [1, 2, 3, 4])
     
@@ -84,13 +83,12 @@ def process_json(label_file):
         if wire.label == "Delete":
             wire_list.remove(wire)
         else:
-
             continue
 
     images_vector.extend(wire_list)
 
 for jsonPath in jsonList:
-    label_file = labelme.LabelFile(filename=jsonPath.absolute())
+    label_file = labelme.LabelFile(filename = jsonPath.absolute())
     try:
         process_json(label_file)
     except:
@@ -112,7 +110,7 @@ for image in images_vector:
     try:
         image_writer(image)
     except:
-        print("there was and error during image saving")
+        print(f"There was and error wile saving image {image.name}")
         continue
 
 existing_csv = os.path.join(os.getcwd(), "Input_Data.csv")
