@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import os
-import copy
+import csv
 from scipy.stats import mode
 from scipy import ndimage
 from pathlib import Path
@@ -92,12 +92,18 @@ for jsonPath in jsonList:
 
     images_vector.extend(wire_list)
 
-print(images_vector)
-
-img_dict = {}
+csv_list = []
+path = os.path.join(os.getcwd(), "wires")
+if not os.path.exists(path) and not os.path.isdir(path):
+    os.mkdir(path)
 
 for image in images_vector:
-    cv2.imwrite(image.name, image.img)
-    current_wire = {image.name : image.label}
-    img_dict.update(current_wire)
-    exit
+    wire = os.path.join(path, image.name)
+    cv2.imwrite(wire, image.img)
+    current_wire = {'image_path' : wire, 'label' : image.label}
+    csv_list.append(current_wire)
+
+with open('Input_Data.csv', 'w') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames = csv_list[0].keys())
+    writer.writeheader()
+    writer.writerows(csv_list)

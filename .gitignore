@@ -2,3 +2,4 @@
 *.tiff
 *.json
 *.csv
+*/*
