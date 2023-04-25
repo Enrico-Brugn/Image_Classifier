@@ -8,21 +8,19 @@ class Net(nn.Module):
         self.dim = 0
         
         self.layers = nn.Sequential(
-            nn.Conv2d(1, 3, 5),
+            nn.Conv2d(1, 6, 5),
+            nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Conv2d(3, 6, 5),
+            nn.Conv2d(6, 16, 5),
+            nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Flatten(),
-            nn.Linear(16 * 5 * 5, 120),
+            nn.Flatten()
+            nn.Linear(6560, 120),
             nn.ReLU(),
             nn.Linear(120, 84),
             nn.ReLU(),
-            nn.Linear(84, 4),
-            nn.Softmax()
+            nn.Linear(84, 5)
         )
 
     def forward(self, x):
-        h = (x.shape[0]-kernel[2])
-        w = (x.shape[1]-kernel[2])/2
-        self.dim = x.shape;
         return self.layers(x)
