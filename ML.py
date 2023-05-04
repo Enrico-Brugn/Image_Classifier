@@ -14,7 +14,7 @@ class Net(nn.Module):
             nn.Conv2d(6, 16, 5),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Flatten()
+            nn.Flatten(),
             nn.Linear(6560, 120),
             nn.ReLU(),
             nn.Linear(120, 84),
