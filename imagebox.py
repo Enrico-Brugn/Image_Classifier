@@ -67,14 +67,17 @@ def process_json(label_file):
             wire.setLabel(wire_label[0][0])
         elif len(wire_label) > 1:
             for label in wire_label:
-                if label[0] == "Wire_Tilted_Perfect" or label[0] == "Wire_Tilted_Defect":
+                if label[0] == "Wire_Tilted_Defect":
                     wire.setLabel("Wire_Tilted_Defect")
                     break
-                elif label[0] == "Wire_Straight_Perfect" or label[0] == "Wire_Straight_Defect":
+                elif label[0] == "Wire_Straight_Defect":
                     wire.setLabel("Wire_Straight_Defect")
                     break
-                else:
+                elif label[0] == "Parassitic":
                     wire.setLabel("Parassitic")
+                    break
+                else:
+                    wire.setLabel("Null")
                     break
         elif len(wire_label) == 0:
             wire.setLabel("Delete")

@@ -5,7 +5,7 @@ import cv2
 
 class WireDataset(Dataset):
     def __init__(self, input_csv):
-        mapping = {'Parasitic': 0, 'Parassitic' : 0,'Wire_Straight_Defect': 1, 'Wire_Straight_Perfect': 2 , 'Wire_Tilted_Defect' : 3, 'Wire_Tilted_Perfect' : 4}
+        mapping = {'Parasitic': 0, 'Parassitic' : 0,'Wire_Straight_Defect': 1, 'Wire_Straight_Perfect': 2 , 'Wire_Tilted_Defect' : 3, 'Wire_Tilted_Perfect' : 4, 'Null' : 5}
         csv = pd.read_csv(input_csv, dtype="string")
         self.input = csv.image_path
         self.output = csv.label
