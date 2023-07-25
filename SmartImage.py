@@ -31,7 +31,7 @@ class SmartImage:
 
     def setName(self, name, wire):
         file = re.split("\.|\/", str(name))
-        if wire < 10:
+        if wire < 10: #TODO and wire.len()<2 ?
             self.name = f"{file[-2]}_0{wire}.tiff"
         else:
             self.name = f"{file[-2]}_{wire}.tiff"
