@@ -73,10 +73,11 @@ def process_json(label_file):
                 elif label[0] == "Wire_Straight_Defect":
                     wire.setLabel("Wire_Straight_Defect")
                     break
-                elif label[0] == "Parassitic":
+                elif label[0] == "Parassitic" or label[0] == "Parasitic":
                     wire.setLabel("Parassitic")
                     break
                 else:
+                    print(f"Could not assign {label[0]} to {wire.name}")
                     wire.setLabel("Null")
                     break
         elif len(wire_label) == 0:
