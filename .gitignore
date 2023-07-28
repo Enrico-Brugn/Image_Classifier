@@ -3,6 +3,7 @@
 *.json
 *.csv
 *.ebr
+*.pdf
 */*
 
 Converter.ipynb
