@@ -7,3 +7,6 @@
 */*
 Noise_Example.ipynb
 Converter.ipynb
+filters.py
+main.py
+*.gitignore
