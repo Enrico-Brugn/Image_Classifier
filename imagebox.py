@@ -7,9 +7,12 @@ from pathlib import Path
 import labelme
 from SmartImage import SmartImage 
 import ImageManipulation as IM
+import pandas as pd
 
-mainDir = Path("/home/enrico/Desktop/json")
-jsonList = list(mainDir.glob('**/*.json'))
+pathcurrent = os.getcwd()
+main_dir = Path(os.path.join(pathcurrent, "Labelled_Data"))
+print(f"Label directory: {main_dir}")
+jsonList = list(main_dir.glob('**/*.json'))
 tiffNames = [(i.stem + ".tif") for i in jsonList]
 
 images_vector = []
@@ -46,48 +49,51 @@ def process_json(label_file):
         wire_list.extend(wires)
 
     labels = label_file.shapes
+    polygon_labels = {}
     i = 0
     for wire in wire_list:
         i += 1
         wire.setName(label_file.filename, i)
-        wire_label = []
-        for label in labels:
-            points_in_image = []
-            for point in label["points"]:
-                if wire.contains(point):
-                    points_in_image.append(point)
-                else:
-                    continue
-            if len(points_in_image) > 0:
-                wire_label.append([label["label"], len(points_in_image)])
-            else:
-                continue
+        label, polygon_labels = IM.label_finder(wire, labels, polygon_labels)
+        wire.setLabel(label)
+        # wire_label = []
+        # for label in labels:
+        #     points_in_image = []
+        #     for point in label["points"]:
+        #         if wire.contains(point):
+        #             points_in_image.append(point)
+        #         else:
+        #             continue
+        #     if len(points_in_image) > 0:
+        #         wire_label.append([label["label"], len(points_in_image)])
+        #     else:
+        #         continue
 
-        if len(wire_label) == 1:
-            wire.setLabel(wire_label[0][0])
-        elif len(wire_label) > 1:
-            for label in wire_label:
-                if label[0] == "Wire_Tilted_Defect":
-                    wire.setLabel("Wire_Tilted_Defect")
-                    break
-                elif label[0] == "Wire_Straight_Defect":
-                    wire.setLabel("Wire_Straight_Defect")
-                    break
-                elif label[0] == "Parassitic" or label[0] == "Parasitic":
-                    wire.setLabel("Parassitic")
-                    break
-                else:
-                    print(f"Could not assign {label[0]} to {wire.name}")
-                    wire.setLabel("Null")
-                    break
-        elif len(wire_label) == 0:
-            wire.setLabel("Delete")
+        # if len(wire_label) == 1:
+        #     wire.setLabel(wire_label[0][0])
+        # elif len(wire_label) > 1:
+        #     for label in wire_label:
+        #         if label[0] == "Wire_Tilted_Defect":
+        #             wire.setLabel("Wire_Tilted_Defect")
+        #             break
+        #         elif label[0] == "Wire_Straight_Defect":
+        #             wire.setLabel("Wire_Straight_Defect")
+        #             break
+        #         elif label[0] == "Parassitic" or label[0] == "Parasitic":
+        #             wire.setLabel("Parassitic")
+        #             break
+        #         else:
+        #             print(f"Could not assign {label[0]} to {wire.name}")
+        #             wire.setLabel("Null")
+        #             break
+        # elif len(wire_label) == 0:
+        #     wire.setLabel("Delete")
 
-    for wire in wire_list:
-        if wire.label == "Delete":
-            wire_list.remove(wire)
-        else:
-            continue
+    # for wire in wire_list:
+    #     if wire.label == "Delete":
+    #         wire_list.remove(wire)
+    #     else:
+    #         continue
 
     images_vector.extend(wire_list)
 
@@ -125,3 +131,7 @@ with open('Input_Data.csv', 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames = csv_list[0].keys())
     writer.writeheader()
     writer.writerows(csv_list)
+
+cvsfile = pd.read_csv('Input_Data.csv')
+csvfile.dropna(axis=0, how='all', inplace=True)
+csvfile.to_csv('Input_Data.csv', index=False)

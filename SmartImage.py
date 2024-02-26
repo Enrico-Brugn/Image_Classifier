@@ -104,7 +104,7 @@ class SmartImage:
         cut_point_1 = np.argmax(grad_min) + 1
         cut_point_2 = np.argmax(grad_max) + 1
         cut_point = cut_point_1 if cut_point_1>cut_point_2 else cut_point_2
-
+        # cut_point = cut_point_2
         self.img = self.img[:, cut_point :]
         if side % 2 == 0:
             offset = -1 * cut_point
@@ -119,12 +119,15 @@ class SmartImage:
         else:
             raise AssertionError('"side" must be and int with a value of 1, 2, 3, or 4.')
         
-        assert new_coord[0][1] >= 0, f"Coordinate lower than 0 after processing side {side}."
-        assert new_coord[1][0] >= 0, f"Coordinate lower than 0 after processing side {side}."
+        assert new_coord[0][1] >= 0, f"Coordinate lower than 0 after processing side {side} in {self.label}."
+        assert new_coord[1][0] >= 0, f"Coordinate lower than 0 after processing side {side} in {self.label}."
         self.coord = new_coord
 
     def print(self):
         plt.imshow(self.img, cmap='Greys_r')
         plt.annotate(self.label, xy = (0, 0))
-        plt.savefig("test.png" )
+        if self.label is not None:
+            plt.savefig(f"{self.label}.png" )
+        else:
+            plt.savefig("print.png" )
     
