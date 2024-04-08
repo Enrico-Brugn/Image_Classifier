@@ -2,15 +2,15 @@ import pandas as pd
 import numpy as np
 filenames = ["Input_Data_saved.csv", 
              "Input_Data_saved1.csv", 
-             "Input_Data_saved2.csv", 
-             "Input_Data.csv"]
+             "Input_Data_saved2.csv"]#, 
+            #  "Input_Data.csv"]
 
 labs=['Parasitic',
       'Wire_Straight_Defect', 
       'Wire_Straight_Perfect', 
       'Wire_Tilted_Defect', 
       'Wire_Tilted_Perfect', 
-      'Null']
+      'delete']
 
 def counter(lab, count = 0):
     for label_ in csv.label:
