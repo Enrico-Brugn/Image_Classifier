@@ -7,8 +7,8 @@ import re
 
 # Define a class for smart image processing
 class SmartImage:
-    """This class contains the informations of a snippet of an image with respect to its original, its name, position and label.
-    
+    """Instances of this class contain the informations of a snippet of an image with respect to its original, its name, position and label.
+
     Attributes:
     name: A string containing the name of the instance
     label: A string containing the label of the image
@@ -40,11 +40,18 @@ class SmartImage:
             return False
 
     def setLabel(self, label):
-        # Set the label for the image
+        """ Set the label for the image.
+            Args:
+                label: String object
+        """
         self.label = label
 
     def setName(self, name, wire):
-        # Set the name for the image based on the file name and wire number
+        """ Set the name for the image based on the file name and wire number.
+            Args:
+                name: String object
+                wire: Int or String object
+        """
         file = re.split("\.|\/", str(name))
         if wire < 10: #TODO and wire.len()<2 ?
             self.name = f"{file[-2]}_0{wire}.tiff"
@@ -75,7 +82,10 @@ class SmartImage:
         self.coord[0][1], self.coord[1][1] = self.coord[1][1], self.coord[0][1] 
 
     def rot90(self, number = 1):
-        # Rotate the image 90 degrees a specified number of times
+        """ Rotate the image 90 degrees a specified number of times
+            Args:
+                Number: Int object
+        """
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
         assert number == 1 or number == 3, 'Please provide an integer equal to 1 or 3 for "number".'
 
@@ -89,7 +99,14 @@ class SmartImage:
     
     @staticmethod
     def min_pool(img, sz = (5,2), stride = (5,1)):
-        # Apply a minimum pooling operation to the image
+        """ Apply a minimum pooling operation to the image
+            Args:
+                img: a numpy array of uint8 values describing a black and white image.
+                sz: tuple or iteratable object with length = 2 containing two int objects.
+                stride: tuple or iteratable object with length = 2 containing two int objects.
+            Return:
+                im: numpy aray of uint8 values describing a black and white image.
+        """
         im = copy.deepcopy(img)
         im_size = img.shape
 
@@ -100,7 +117,14 @@ class SmartImage:
 
     @staticmethod
     def max_pool(img, sz = (5,2), stride = (5,1)):
-        # Apply a maximum pooling operation to the image
+        """ Apply a minimum pooling operation to the image
+            Args:
+                img: a numpy array of uint8 values describing a black and white image.
+                sz: tuple or iteratable object with length = 2 containing two int objects.
+                stride: tuple or iteratable object with length = 2 containing two int objects.
+            Return:
+                im: numpy aray of uint8 values describing a black and white image.
+        """
         im = copy.deepcopy(img)
         im_size = img.shape
 
@@ -110,7 +134,9 @@ class SmartImage:
         return im
 
     def cut(self, side):
-        # Cut the image along a specified side
+        """ Cut the image along a specified side
+            side: int object with values being 1, 2, 3, or 4.
+        """
         A = cv2.fastNlMeansDenoising(copy.deepcopy(self.img))
         oc = copy.deepcopy(self.coord) # original coordinates
 

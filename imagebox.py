@@ -26,8 +26,13 @@ tiffNames = [(i.stem + ".tif") for i in jsonList]
 # Initialize an empty list to store the images
 images_vector = []
 
-# Define a function to process a JSON file
+# Define a function to process a JSON file to extract the all the wires
 def process_json(label_file):
+    """ Isolate the various wires from the array image contained in the LabelMe-genarated JSON file and assign each image a label.
+        Args:
+            label_file: JSON file from the dataset associated with this code.
+    """
+
     # Convert the image data in the JSON file to an array
     img = labelme.utils.img_data_to_arr(label_file.imageData)
     
@@ -113,8 +118,12 @@ path = os.path.join(os.getcwd(), "wires")
 if not os.path.exists(path) and not os.path.isdir(path):
     os.mkdir(path)
 
-# Define a function to save an image and add its information to the CSV list
+# Define a function to save the wire image and add its information to the CSV list
 def image_writer(image):
+    """ Save the isolated wire image and add its path and label to the csv file
+        Args:
+            image: SmartImage instance
+    """
     wire = os.path.join(path, image.name)
     cv2.imwrite(wire, image.img)
     current_wire = {'image_path' : wire, 'label' : image.label}
