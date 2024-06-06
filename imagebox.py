@@ -41,7 +41,7 @@ def process_json(label_file):
     img1 = imga[100 : imga.shape[0] - 200, 
                 50 : imga.shape[1] - 50]
     
-    # Create a SmartImage object from the cropped image
+    # Create a SmartImage instance from the cropped image
     starting_smart_im = SmartImage(img1, 
                                    np.array([[100, 50], 
                                              [img.shape[0] - 200, img.shape[1] - 50]]))

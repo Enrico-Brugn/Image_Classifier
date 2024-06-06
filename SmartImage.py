@@ -7,6 +7,15 @@ import re
 
 # Define a class for smart image processing
 class SmartImage:
+    """This class contains the informations of a snippet of an image with respect to its original, its name, position and label.
+    
+    Attributes:
+    name: A string containing the name of the instance
+    label: A string containing the label of the image
+    rotation_number: a number that keeps track of the orientation of the image with respect to the original, multiply the number to a 90 degree rotation
+    img: a numpy array containing uint8 values representing a black and white image
+    coord: coordinates indicating the position of the image in img in the original image
+    """
     def __init__(self, image, coordinates, rotation_number = 0):
         # Initialize the class with an image, its coordinates, and a rotation number
         self.name = None
