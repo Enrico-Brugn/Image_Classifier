@@ -5,6 +5,13 @@ from shapely import Polygon
 
 # Define a function to cut an image along specified sides
 def cut_side(img1 , sides):
+    """ Cut an image along specified sides:
+        Args:
+            img1: SmartImage instance.
+            sides: list or iterable object containing int objects. Accepted values are 1, 2, 3, and 4.
+        Returns:
+            img1: SmartImage instance.
+    """
     for side in sides:
         if side == 1: # cut left
             img1.cut(side)
@@ -24,6 +31,13 @@ def cut_side(img1 , sides):
 
 # Define a function to split an image into a specified number of parts
 def split(img1, num = 3):
+    """ Divides an image into multiple images.
+        Args:
+            img1: SmartImage instance.
+            num: int object. Specifies how many imgaes will result from the cut.
+        Returns:
+            smart_image_list: list object containing as many SmartImage instances as specified in "num".
+    """
     arrays = np.array_split(img1.img, num, axis=1)
     x_sizes = []
     for array in arrays:
@@ -56,6 +70,13 @@ def split(img1, num = 3):
 
 # Define a function to generate four coordinates for a rectangle
 def generate_four_coordinate(rectangle, source="SmartImage"):
+    """ Generates a list of 4 coordinate pairs from the two edges defining a rectangle.
+        Args:
+            rectangle: numpy array containing two coordinate pairs.
+            source: string object with value "SmartImage" or "label" to take into account the different coordinate order in the SmartImage object and the label file.
+        Returns
+            coords: tuple object containing four tuple objects each containing two int objects representing the coordinate pairs
+    """
     if source == "SmartImage":
         xs = rectangle[:,1]
         ys = rectangle[:,0]
