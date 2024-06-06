@@ -4,7 +4,7 @@ import pandas as pd
 import torchvision.transforms as T
 import cv2
 
-# Define a custom dataset class
+
 class WireDataset(Dataset):
     def __init__(self, input_csv):
         # Define a mapping for the labels
