@@ -1,7 +1,9 @@
+# Import necessary libraries
 import numpy as np
 from SmartImage import SmartImage
 from shapely import Polygon
 
+# Define a function to cut an image along specified sides
 def cut_side(img1 , sides):
     for side in sides:
         if side == 1: # cut left
@@ -20,6 +22,7 @@ def cut_side(img1 , sides):
             img1.rot90(3)
     return img1
 
+# Define a function to split an image into a specified number of parts
 def split(img1, num = 3):
     arrays = np.array_split(img1.img, num, axis=1)
     x_sizes = []
@@ -51,6 +54,7 @@ def split(img1, num = 3):
         smart_image_list[1].assess_coords()
     return smart_image_list
 
+# Define a function to generate four coordinates for a rectangle
 def generate_four_coordinate(rectangle, source="SmartImage"):
     if source == "SmartImage":
         xs = rectangle[:,1]
@@ -66,6 +70,7 @@ def generate_four_coordinate(rectangle, source="SmartImage"):
     coords = ((x_low, y_low), (x_low, y_high), (x_high, y_high), (x_high, y_low))
     return coords
 
+# Define a function to generate a polygon label
 def generate_poly_label(label):
     if label["shape_type"] == "rectangle":
         label_polygon = Polygon(shell = generate_four_coordinate(label["points"], source = "label"))
@@ -79,7 +84,7 @@ def generate_poly_label(label):
     else:
         raise AssertionError
 
-
+# Define a function to find the label for a wire
 def label_finder(wire, labels, polygon_labels):
     wire_label = []
     poly_labels = polygon_labels
@@ -99,7 +104,6 @@ def label_finder(wire, labels, polygon_labels):
         return wire_label[0][0], poly_labels
     elif len(wire_label) == 0:
         label_delete = "Null"
-        # print(f"Returning label {label_delete} for wire {wire.name}")
         return label_delete, poly_labels
     elif len(wire_label) > 1:
         wire_polygon = Polygon(shell=generate_four_coordinate(wire.coord))
@@ -122,7 +126,6 @@ def label_finder(wire, labels, polygon_labels):
                 matching_labels.update({area : label})
             else:
                 continue
-        # print(f"matching_labels:{matching_labels}")
         max_area = float(0.0)
         final_label = None
 
@@ -130,5 +133,4 @@ def label_finder(wire, labels, polygon_labels):
             if area > max_area:
                 max_area = area
                 final_label = label
-        # print(f"{final_label} was assigned to {wire.name}")
         return final_label, poly_labels
