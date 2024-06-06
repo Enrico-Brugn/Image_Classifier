@@ -91,8 +91,14 @@ def generate_four_coordinate(rectangle, source="SmartImage"):
     coords = ((x_low, y_low), (x_low, y_high), (x_high, y_high), (x_high, y_low))
     return coords
 
-# Define a function to generate a polygon label
+# Define a function to generate a polygon label couple
 def generate_poly_label(label):
+    """ Creates a dictionary containing a Polygon instance as key and the associated label string from one of the labels in the JSON file
+        Args:
+            label: single label from the JSON file from the dataset associated with this code
+        Returns:
+            poly_label: Dictionary object with a single key:value pair.
+    """
     if label["shape_type"] == "rectangle":
         label_polygon = Polygon(shell = generate_four_coordinate(label["points"], source = "label"))
         poly_label = {label_polygon: f'{label["label"]}'}
@@ -107,6 +113,15 @@ def generate_poly_label(label):
 
 # Define a function to find the label for a wire
 def label_finder(wire, labels, polygon_labels):
+    """ Function to discerne which label to assign to an SmartImage instance.
+        Args:
+            wire: SmartImage instance.
+            labels: labels portion of the JSON file contained in the dataset paired with this code
+            polygon_labels: dictionary object
+        Returns:
+            final_label: string object, one of the labels used in the paired dataset.
+            polygon_labels: dictionary object containing the Polygon istances created with the Shapely package from the label coordinates in the Json file as keys and their associated label strings as values.
+    """
     wire_label = []
     poly_labels = polygon_labels
     for label in labels:
