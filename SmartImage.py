@@ -1,11 +1,14 @@
+# Import necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import cv2
 import re
 
+# Define a class for smart image processing
 class SmartImage:
     def __init__(self, image, coordinates, rotation_number = 0):
+        # Initialize the class with an image, its coordinates, and a rotation number
         self.name = None
         self.label = None
         self.rotation_number = rotation_number
@@ -13,6 +16,7 @@ class SmartImage:
         self.coord = coordinates
     
     def contains(self, point):
+        # Check if a point is within the image's coordinates
         assert len(point) == 2
         x, y = point[0], point[1]
 
@@ -27,9 +31,11 @@ class SmartImage:
             return False
 
     def setLabel(self, label):
+        # Set the label for the image
         self.label = label
 
     def setName(self, name, wire):
+        # Set the name for the image based on the file name and wire number
         file = re.split("\.|\/", str(name))
         if wire < 10: #TODO and wire.len()<2 ?
             self.name = f"{file[-2]}_0{wire}.tiff"
@@ -37,11 +43,13 @@ class SmartImage:
             self.name = f"{file[-2]}_{wire}.tiff"
 
     def increase_rot_num(self):
+        # Increase the rotation number and reset it to 0 if it reaches 4
         self.rotation_number +=1
         if self.rotation_number % 4 == 0:
             self.rotation_number = 0
 
     def assess_coords(self):
+        # Assess the coordinates and adjust them if necessary
         if self.rotation_number == 0 or self.rotation_number % 4 == 0:
             oc = self.coord
             if oc[0][0] > oc[1][0]: #y axis
@@ -52,11 +60,13 @@ class SmartImage:
                                        [oc[1][0], oc[0][1]]])
 
     def fliplr(self):
+        # Flip the image left to right
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
         self.img = np.fliplr(self.img)
         self.coord[0][1], self.coord[1][1] = self.coord[1][1], self.coord[0][1] 
 
     def rot90(self, number = 1):
+        # Rotate the image 90 degrees a specified number of times
         assert isinstance(self.img, np.ndarray), "Image is not an numpy.ndarray instance."
         assert number == 1 or number == 3, 'Please provide an integer equal to 1 or 3 for "number".'
 
@@ -70,6 +80,7 @@ class SmartImage:
     
     @staticmethod
     def min_pool(img, sz = (5,2), stride = (5,1)):
+        # Apply a minimum pooling operation to the image
         im = copy.deepcopy(img)
         im_size = img.shape
 
@@ -80,6 +91,7 @@ class SmartImage:
 
     @staticmethod
     def max_pool(img, sz = (5,2), stride = (5,1)):
+        # Apply a maximum pooling operation to the image
         im = copy.deepcopy(img)
         im_size = img.shape
 
@@ -89,6 +101,7 @@ class SmartImage:
         return im
 
     def cut(self, side):
+        # Cut the image along a specified side
         A = cv2.fastNlMeansDenoising(copy.deepcopy(self.img))
         oc = copy.deepcopy(self.coord) # original coordinates
 
@@ -124,10 +137,12 @@ class SmartImage:
         self.coord = new_coord
 
     def print(self):
+        # Print the image with its label
         plt.imshow(self.img, cmap='Greys_r')
         plt.annotate(self.label, xy = (0, 0))
         if self.label is not None:
             plt.savefig(f"{self.label}.png" )
         else:
             plt.savefig("print.png" )
+
     
